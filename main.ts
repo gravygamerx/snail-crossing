@@ -1,12 +1,16 @@
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    snail.y += -16
+    snail.y -= 16
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    snail.x += -16
+    snail.x -= 16
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    snail.x += 16
+})
+controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     snail.y += 16
 })
+
 let rightcar: Sprite = null
 let Leftcar: Sprite = null
 let snail: Sprite = null
