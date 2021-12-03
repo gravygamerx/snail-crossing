@@ -10,9 +10,66 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     snail.y += 16
 })
-
-let rightcar: Sprite = null
-let Leftcar: Sprite = null
+scene.onOverlapTile(SpriteKind.Player, sprites.castle.tileGrass2, function (sprite, location) {
+if(heldBerry != null) {
+    tiles.placeOnTile(heldBerry, location)
+    heldBerry.setImage(img``)
+    heldBerry = null
+}
+})
+function spawnBerries (numBerries: number, startCalumn: number, startRow: number, gap: number) {
+    for (let index = 0; index < numBerries; index++) {
+        berry = sprites.create(img`
+            . . . . . . . 6 . . . . . . . .
+            . . . . . . 8 6 6 . . . 6 8 . .
+            . . . e e e 8 8 6 6 . 6 7 8 . .
+            . . e 2 2 2 2 e 8 6 6 7 6 . . .
+            . e 2 2 4 4 2 7 7 7 7 7 8 6 . .
+            . e 2 4 4 2 6 7 7 7 6 7 6 8 8 .
+            e 2 4 5 2 2 6 7 7 6 2 7 7 6 . .
+            e 2 4 4 2 2 6 7 6 2 2 6 7 7 6 .
+            e 2 4 2 2 2 6 6 2 2 2 e 7 7 6 .
+            e 2 4 2 2 4 2 2 2 4 2 2 e 7 6 .
+            e 2 4 2 2 2 2 2 2 2 2 2 e c 6 .
+            e 2 2 2 2 2 2 2 4 e 2 e e c . .
+            e e 2 e 2 2 4 2 2 e e e c . . .
+            e e e e 2 e 2 2 e e e c . . . .
+            e e e 2 e e c e c c c . . . . .
+            . c c c c c c c . . . . . . . .
+        `, SpriteKind.Food)
+        berry.z = -1
+        tiles.placeOnTile(berry, tiles.getTileLocation(startCalumn, startRow))
+        startCalumn += 1 + gap
+    }
+}
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (playersprite, berrySprite) {
+    if (heldBerry == null) {
+        heldBerry = berrySprite
+        berrySprite.setImage(img`
+            . . . . . . . 6 . . . . . . . .
+            . . . . . . 8 6 6 . . . 6 8 . .
+            . . . e e e 8 8 6 6 . 6 7 8 . .
+            . . e 2 2 2 2 e 8 6 6 7 6 . . .
+            . e 2 2 4 4 2 7 7 7 7 7 8 6 . .
+            . e 2 4 4 2 6 7 7 7 6 7 6 8 8 .
+            e 2 4 5 2 2 6 7 7 6 2 7 7 6 . .
+            e 2 4 4 2 2 6 7 6 2 2 6 7 7 6 .
+            e 2 4 2 2 2 6 6 2 2 2 e 7 7 6 .
+            e 2 4 2 2 4 2 2 2 4 2 2 e 7 6 .
+            e 2 4 2 2 2 2 2 2 2 2 2 e c 6 .
+            e 2 2 2 2 2 2 2 4 e 2 e e c . .
+            e e 2 e 2 2 4 2 2 e e e c . . .
+            e e e e 2 e 2 2 e e e c . . . .
+            e e e 2 e e c e c c c . . . . .
+            . c c c c c c c . . . . . . . .
+        `)
+    }
+})
+let startCalumn = 0
+let berry: Sprite = null
+let rightcar = null
+let Leftcar = null
+let heldBerry:Sprite = null
 let snail: Sprite = null
 tiles.setTilemap(tilemap`level1`)
 snail = sprites.create(img`
@@ -84,3 +141,5 @@ game.onUpdateInterval(500, function () {
     rightcar.setFlag(SpriteFlag.DestroyOnWall, true)
     rightcar.x = -20
 })
+
+spawnBerries(4,  2,  1,  1,)
